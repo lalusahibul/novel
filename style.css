@@ -1,0 +1,160 @@
+        /* Custom Themes */
+        .theme-sepia {
+            --bg-body: #ece4d5;
+            --bg-book: #fbf7ee;
+            --bg-spine: #e3d7c3;
+            --text-main: #2c251e;
+            --text-muted: #7c6f5e;
+            --border-color: #e5dace;
+            --accent: #8c6d46;
+        }
+
+        .theme-parchment {
+            --bg-body: #cfc2a9;
+            --bg-book: #f4ebd9;
+            --bg-spine: #beaf93;
+            --text-main: #332619;
+            --text-muted: #6e5b47;
+            --border-color: #ddceb7;
+            --accent: #785129;
+        }
+
+        .theme-light {
+            --bg-body: #e5e7eb;
+            --bg-book: #ffffff;
+            --bg-spine: #d1d5db;
+            --text-main: #1f2937;
+            --text-muted: #6b7280;
+            --border-color: #f3f4f6;
+            --accent: #3b82f6;
+        }
+
+        .theme-dark {
+            --bg-body: #111827;
+            --bg-book: #1f2937;
+            --bg-spine: #111827;
+            --text-main: #e5e7eb;
+            --text-muted: #9ca3af;
+            --border-color: #374151;
+            --accent: #60a5fa;
+        }
+
+        body {
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            transition: background-color 0.3s ease;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        .book-container {
+            background-color: var(--bg-book);
+            color: var(--text-main);
+            box-shadow: 0 20px 30px -10px rgba(0, 0, 0, 0.3), 0 0 15px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* Spine Shadow for Two Page View */
+        .book-spine-shadow {
+            background: linear-gradient(to right,
+                    rgba(0, 0, 0, 0.15) 0%,
+                    rgba(0, 0, 0, 0.05) 40%,
+                    rgba(0, 0, 0, 0) 50%,
+                    rgba(0, 0, 0, 0.05) 60%,
+                    rgba(0, 0, 0, 0.15) 100%);
+        }
+
+        /* Page Flip Animation Effect */
+        .page-turn-next {
+            animation: turnNext 0.4s ease-in-out;
+        }
+
+        .page-turn-prev {
+            animation: turnPrev 0.4s ease-in-out;
+        }
+
+        @keyframes turnNext {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+
+            50% {
+                transform: scale(0.98) translateX(-10px);
+                opacity: 0.7;
+            }
+
+            100% {
+                transform: scale(1) translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes turnPrev {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+
+            50% {
+                transform: scale(0.98) translateX(10px);
+                opacity: 0.7;
+            }
+
+            100% {
+                transform: scale(1) translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* Custom Scrollbar for Drawer */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(156, 163, 175, 0.5);
+            border-radius: 3px;
+        }
+
+        /* Typography Classes */
+        .font-merriweather {
+            font-family: 'Merriweather', serif;
+        }
+
+        .font-lora {
+            font-family: 'Lora', serif;
+        }
+
+        .font-cinzel {
+            font-family: 'Cinzel', serif;
+        }
+
+        .font-sans-custom {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        /* Paragraph Styling in Novel */
+        .novel-paragraph {
+            text-indent: 2rem;
+            margin-bottom: 0.85rem;
+            line-height: 1.8;
+            text-align: justify;
+            text-justify: inter-word;
+            /* Membantu merapikan spasi antar kata */
+            hyphens: auto;
+        }
+
+        .novel-chapter-title {
+            font-family: 'Cinzel', serif;
+            text-align: center;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            margin-top: 1rem;
+            margin-bottom: 2rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid var(--border-color);
+        }

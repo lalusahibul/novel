@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulasi Novel</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Lora:ital,wght@0,400;0,600;1,400&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap"
+        rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="theme-sepia min-h-screen flex flex-col justify-between overflow-x-hidden select-none">
+
+    <!-- TOP NAVIGATION BAR -->
+    <header
+        class="bg-opacity-90 backdrop-blur-md sticky top-0 z-30 px-4 py-3 border-b border-black/10 flex items-center justify-between shadow-sm transition-colors duration-300"
+        style="background-color: var(--bg-book);">
+        <div class="flex items-center space-x-3">
+            <button id="btn-toc" class="p-2 rounded-lg hover:bg-black/5 text-lg transition-colors" title="Daftar Isi">
+                <i class="fa-solid fa-list-ul"></i>
+            </button>
+            <button id="btn-import" class="p-2 rounded-lg hover:bg-black/5 text-lg transition-colors"
+                title="Buka File / Edit Teks">
+                <i class="fa-solid fa-file-import"></i>
+            </button>
+            <h1 id="book-title"
+                class="font-cinzel font-bold text-base md:text-lg truncate max-w-[180px] sm:max-w-xs md:max-w-md">
+                Judul Novel
+            </h1>
+        </div>
+        <!-- Controls (Font, Theme, Layout) -->
+        <div class="flex items-center space-x-1 sm:space-x-2">
+            <!-- Tombol Musik Latar -->
+            <button id="btn-music" class="p-2 rounded-lg hover:bg-black/5 text-lg transition-colors relative"
+                title="Putar / Hentikan Musik">
+                <!-- Menggunakan ikon fa-music untuk kondisi mati dan hidup -->
+                <i id="music-icon" class="fa-solid fa-music opacity-50"></i>
+                <!-- Indikator animasi gelombang kecil saat musik menyala -->
+                <span id="music-pulse" class="absolute top-1 right-1 flex h-2 w-2 hidden">
+                    <span
+                        class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-2 w-2 bg-amber-500"></span>
+                </span>
+            </button>
+
+            <!-- Elemen Audio (Ganti src dengan link file audio/musik latar Boss) -->
+            <audio id="bg-music" loop preload="auto">
+                <source src="zenmix-calming-down-and-relaxation-during-a-storm-in-your-forest-hut-111656.mp3"
+                    type="audio/mpeg">
+                Browser Anda tidak mendukung elemen audio.
+            </audio>
+            <!-- Layout Toggle (Single / Spread) -->
+            <button id="btn-layout"
+                class="hidden md:flex p-2 rounded-lg hover:bg-black/5 transition-colors text-sm items-center space-x-1"
+                title="Ubah Layout Halaman">
+                <i class="fa-solid fa-book-open"></i>
+                <span id="layout-text" class="text-xs font-semibold">2 Halaman</span>
+            </button>
+
+            <!-- Settings Menu Toggle -->
+            <button id="btn-settings" class="p-2 rounded-lg hover:bg-black/5 text-lg transition-colors"
+                title="Pengaturan Tampilan">
+                <i class="fa-solid fa-sliders"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- SETTINGS PANEL (DROPDOWN / POPUP) -->
+    <div id="settings-panel"
+        class="hidden fixed top-16 right-4 z-40 w-72 rounded-xl shadow-2xl p-4 border border-black/10 transition-all duration-300"
+        style="background-color: var(--bg-book);">
+        <h3 class="font-bold text-sm uppercase tracking-wider mb-3 text-opacity-70" style="color: var(--text-muted)">
+            Pengaturan Tampilan</h3>
+
+        <!-- Theme Selection -->
+        <div class="mb-4">
+            <label class="block text-xs font-medium mb-2">Tema Warna</label>
+            <div class="grid grid-cols-4 gap-2">
+                <button onclick="setTheme('theme-sepia')"
+                    class="h-8 rounded-md border border-black/20 flex items-center justify-center bg-[#fbf7ee] text-[#2c251e]"
+                    title="Sepia">
+                    <i class="fa-solid fa-check text-xs theme-check" id="check-sepia"></i>
+                </button>
+                <button onclick="setTheme('theme-parchment')"
+                    class="h-8 rounded-md border border-black/20 flex items-center justify-center bg-[#f4ebd9] text-[#332619]"
+                    title="Parchment">
+                    <i class="fa-solid fa-check text-xs theme-check hidden" id="check-parchment"></i>
+                </button>
+                <button onclick="setTheme('theme-light')"
+                    class="h-8 rounded-md border border-black/20 flex items-center justify-center bg-white text-gray-800"
+                    title="Terang">
+                    <i class="fa-solid fa-check text-xs theme-check hidden" id="check-light"></i>
+                </button>
+                <button onclick="setTheme('theme-dark')"
+                    class="h-8 rounded-md border border-black/20 flex items-center justify-center bg-gray-800 text-gray-100"
+                    title="Gelap">
+                    <i class="fa-solid fa-check text-xs theme-check hidden" id="check-dark"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Font Family -->
+        <div class="mb-4">
+            <label class="block text-xs font-medium mb-2">Jenis Font</label>
+            <select id="font-family-select"
+                class="w-full text-sm p-2 rounded-lg border border-black/10 bg-black/5 focus:outline-none">
+                <option value="font-merriweather">Merriweather (Serif)</option>
+                <option value="font-lora">Lora (Serif)</option>
+                <option value="font-sans-custom">Plus Jakarta (Sans)</option>
+            </select>
+        </div>
+
+        <!-- Font Size -->
+        <div>
+            <div class="flex justify-between text-xs font-medium mb-1">
+                <span>Ukuran Teks</span>
+                <span id="font-size-label">16px</span>
+            </div>
+            <div class="flex items-center space-x-2">
+                <span class="text-xs">A-</span>
+                <input type="range" id="font-size-range" min="14" max="22" value="16"
+                    class="w-full accent-amber-700 cursor-pointer">
+                <span class="text-base font-bold">A+</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- SIDEBAR DAFTAR ISI (TOC DRAWER) -->
+    <div id="toc-drawer"
+        class="fixed inset-y-0 left-0 z-50 w-80 shadow-2xl transform -translate-x-full transition-transform duration-300 ease-in-out flex flex-col"
+        style="background-color: var(--bg-book);">
+        <div class="p-4 border-b border-black/10 flex justify-between items-center">
+            <h2 class="font-cinzel font-bold text-lg">Daftar Isi</h2>
+            <button id="btn-close-toc" class="p-2 rounded-lg hover:bg-black/5 text-lg">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+        <div id="toc-list" class="flex-1 overflow-y-auto p-4 space-y-1">
+            <!-- Items generated dynamically -->
+        </div>
+    </div>
+    <!-- Backdrop for Drawer -->
+    <div id="toc-backdrop" class="fixed inset-0 bg-black/40 z-40 hidden transition-opacity"></div>
+
+    <!-- MODAL INPUT FILE / TEXT -->
+    <div id="import-modal" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 hidden">
+        <div class="rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-4" style="background-color: var(--bg-book);">
+            <div class="flex justify-between items-center border-b border-black/10 pb-3">
+                <h3 class="font-bold text-lg">Impor Teks / File Novel</h3>
+                <button id="btn-close-modal" class="text-gray-500 hover:text-black">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <!-- Rules info -->
+            <div class="text-xs p-3 rounded-lg bg-black/5 space-y-1 text-opacity-80" style="color: var(--text-main);">
+                <p class="font-semibold"><i class="fa-solid fa-circle-info mr-1"></i> Format Penanda Teks:</p>
+                <p>• <b>~</b> di awal baris = Judul Bab (Contoh: <code
+                        class="bg-black/10 px-1 rounded">~ Bab 1: Awal Mula</code>)</p>
+                <p>• <b>~~</b> = Pemisah Paragraf / Baris Baru (Ganti Alinea)</p>
+            </div>
+
+            <!-- Upload File -->
+            <div>
+                <label class="block text-xs font-semibold uppercase tracking-wider mb-2">Upload File (.txt)</label>
+                <input type="file" id="file-input" accept=".txt"
+                    class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-amber-800 file:text-white hover:file:bg-amber-900 cursor-pointer">
+            </div>
+
+            <div class="relative flex py-1 items-center">
+                <div class="flex-grow border-t border-black/10"></div>
+                <span class="flex-shrink mx-4 text-xs text-gray-400 uppercase font-semibold">atau tempel teks</span>
+                <div class="flex-grow border-t border-black/10"></div>
+            </div>
+
+            <!-- Raw Text Area -->
+            <div>
+                <textarea id="raw-text-input" rows="6" placeholder="Masukkan teks dengan penanda ~ dan ~~ di sini..."
+                    class="w-full p-3 text-sm rounded-xl border border-black/10 bg-black/5 focus:outline-none focus:ring-2 focus:ring-amber-800/50 resize-none font-mono"></textarea>
+            </div>
+
+            <div class="flex justify-end space-x-2 pt-2">
+                <button id="btn-load-demo"
+                    class="px-4 py-2 rounded-xl border border-black/20 text-xs font-semibold hover:bg-black/5">Muat Teks
+                    Demo</button>
+                <button id="btn-process-text"
+                    class="px-5 py-2 rounded-xl bg-amber-800 text-white text-xs font-semibold hover:bg-amber-900 shadow-md">Proses
+                    Teks</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN NOVEL DISPLAY AREA -->
+    <!-- MAIN NOVEL DISPLAY AREA -->
+    <main class="flex-1 flex items-center justify-center p-2 sm:p-4 md:p-6 max-w-7xl mx-auto w-full">
+        <!-- BOOK WRAPPER -->
+        <div id="book-wrapper"
+            class="book-container w-full min-h-[75vh] md:min-h-[82vh] rounded-2xl md:rounded-3xl flex flex-col justify-between relative overflow-hidden transition-all duration-300">
+
+            <!-- Spine shadow for 2 page spread mode -->
+            <div id="book-spine"
+                class="absolute inset-y-0 left-1/2 -translate-x-1/2 w-16 book-spine-shadow pointer-events-none hidden md:block z-10">
+            </div>
+
+            <!-- PAGES CONTAINER -->
+            <div id="pages-container"
+                class="grid grid-cols-1 md:grid-cols-2 flex-1 p-4 sm:p-8 md:p-10 gap-4 md:gap-8 relative">
+
+                <!-- LEFT / SINGLE PAGE (Tambahkan px-4 atau px-6 untuk jarak aman) -->
+                <div id="page-left"
+                    class="flex flex-col justify-between h-full font-merriweather relative overflow-hidden px-4 md:px-6">
+                    <div id="content-left" class="space-y-2">
+                        <!-- Left Page Content -->
+                    </div>
+                    <div class="pt-4 text-center text-xs font-semibold text-opacity-50 tracking-widest border-t border-black/5 mt-auto"
+                        style="color: var(--text-muted);" id="page-num-left">
+                        1
+                    </div>
+                </div>
+
+                <!-- RIGHT PAGE (Tambahkan px-4 atau px-6 & sesuaikan border) -->
+                <div id="page-right"
+                    class="hidden md:flex flex-col justify-between h-full font-merriweather relative overflow-hidden border-l border-black/5 px-4 md:px-6">
+                    <div id="content-right" class="space-y-2">
+                        <!-- Right Page Content -->
+                    </div>
+                    <div class="pt-4 text-center text-xs font-semibold text-opacity-50 tracking-widest border-t border-black/5 mt-auto"
+                        style="color: var(--text-muted);" id="page-num-right">
+                        2
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </main>
+
+    <!-- FOOTER NAVIGATION CONTROLS -->
+    <footer class="py-3 px-4 flex items-center justify-between max-w-4xl mx-auto w-full text-xs font-semibold">
+        <button id="btn-prev"
+            class="flex items-center space-x-2 px-4 py-2 rounded-xl bg-black/5 hover:bg-black/10 transition-colors disabled:opacity-30 disabled:cursor-not-allowed">
+            <i class="fa-solid fa-chevron-left"></i>
+            <span>Sebelumnya</span>
+        </button>
+
+        <!-- Progress Indicator -->
+        <div class="flex flex-col items-center">
+            <span id="page-indicator">Halaman 1 dari 1</span>
+            <div class="w-32 sm:w-48 bg-black/10 h-1.5 rounded-full mt-1 overflow-hidden">
+                <div id="progress-bar" class="bg-amber-800 h-full w-0 transition-all duration-300"></div>
+            </div>
+        </div>
+
+        <button id="btn-next"
+            class="flex items-center space-x-2 px-4 py-2 rounded-xl bg-black/5 hover:bg-black/10 transition-colors disabled:opacity-30 disabled:cursor-not-allowed">
+            <span>Selanjutnya</span>
+            <i class="fa-solid fa-chevron-right"></i>
+        </button>
+    </footer>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script src="script.js"></script>
+</body>
+
+</html>
